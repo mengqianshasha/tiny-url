@@ -2,6 +2,7 @@ package edu.northeastern.tinyurl.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -15,6 +16,9 @@ public class User implements Serializable {
     private String userName;
     private String email;
     private String passwordHash;
+
+    @OneToMany(mappedBy="user")
+    private List<UrlMapping> mappings;
 
     public long getUserId() {
         return UserId;
@@ -48,13 +52,11 @@ public class User implements Serializable {
         this.passwordHash = passwordHash;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "UserId=" + UserId +
-                ", userName='" + userName + '\'' +
-                ", email='" + email + '\'' +
-                ", passwordHash='" + passwordHash + '\'' +
-                '}';
+    public List<UrlMapping> getMappings() {
+        return mappings;
+    }
+
+    public void setMappings(List<UrlMapping> mappings) {
+        this.mappings = mappings;
     }
 }
