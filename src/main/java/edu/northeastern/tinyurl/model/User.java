@@ -12,28 +12,20 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private long UserId;
-    private String userName;
+    private long userId;
     private String email;
-    private String passwordHash;
+    private String password;
+    private String userName;
 
     @OneToMany(mappedBy="user")
     private List<UrlMapping> mappings;
 
     public long getUserId() {
-        return UserId;
+        return userId;
     }
 
     public void setUserId(long userId) {
-        UserId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
+        this.userId = userId;
     }
 
     public String getEmail() {
@@ -44,12 +36,12 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<UrlMapping> getMappings() {
@@ -58,5 +50,13 @@ public class User implements Serializable {
 
     public void setMappings(List<UrlMapping> mappings) {
         this.mappings = mappings;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

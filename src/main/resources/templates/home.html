@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <title>Welcome to TinyUrl</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+  <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/css/login.css" />
+  <script>
+    // TODO correctly add CSRF token
+    function logout(){
+      $.ajax({
+        url: "/logout",
+        method: "POST"
+      });
+    }
+  </script>
+</head>
+<body style="background-image: url(https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1920&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=c0d43804e2c7c93143fe8ff65398c8e9);">
+<nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-inverse">
+  <a class="navbar-brand" th:href="@{/}"><img th:src="@{/img/tiny_url.png}" style="width: 20%"></a>
+  <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item active">
+      <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" th:href="@{/mapping_history}">History</a>
+    </li>
+    <li class="nav-item">
+      <span class="nav-link" onclick="logout();">Log Out</span>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link">Welcome <span sec:authentication="principal.fullName"></span></a>
+    </li>
+  </ul>
+</nav>
+<div class="wrapper">
+  <form class="p-3 mt-3" th:action="@{/create_mapping}" th:object="${mapping}" method="post">
+    <div class="form-group">
+      <label> Enter a long URL to make a TinyURL</label>
+      <input type="text" th:field="*{originalUrl}" class="form-control" required="required">
+    </div>
+    <div class="form-group">
+      <label>Customize your link</label>
+      <span th:text="*{domainName}"></span><input type="text" th:field="*{customUrl}" class="form-control">
+    </div>
+    <input type="hidden" th:field="*{domainName}">
+    <div class="form-group clearfix">
+      <button type="submit" class="btn btn-primary float-left">Make TinyUrl</button>
+    </div>
+  </form>
+</div>
+
+</body>
+</html>

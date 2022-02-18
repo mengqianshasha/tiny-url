@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class UrlMappingRequest implements Serializable {
     private static final long serialVersionUID = -2224190559469070508L;
+    private String domainName;
     private String customUrl;
     private String originalUrl;
 
@@ -21,5 +22,13 @@ public class UrlMappingRequest implements Serializable {
 
     public void setOriginalUrl(String originalUrl) {
         this.originalUrl = originalUrl;
+    }
+
+    public String getDomainName() {
+        return domainName;
+    }
+
+    public void setDomainName(String domainName) {
+        this.domainName = domainName;
     }
 }

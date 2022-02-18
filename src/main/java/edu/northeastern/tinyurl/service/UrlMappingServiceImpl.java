@@ -10,8 +10,12 @@ import edu.northeastern.tinyurl.util.ShortUrlGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,14 +27,25 @@ public class UrlMappingServiceImpl implements UrlMappingService{
     private UserRepository userRepository;
 
     @Override
-    public String createShortenedUrl(long userId, UrlMappingRequest input) {
+    public UrlMapping createShortenedUrl(long userId, UrlMappingRequest input) {
+        String shortUrl = input.getCustomUrl() != null ? input.getCustomUrl() :
+                ShortUrlGenerator.generateShortUrl(input.getOriginalUrl());
         UrlMapping mapping = new UrlMapping(
-                input.getCustomUrl() != null ? input.getCustomUrl() :
-                        ShortUrlGenerator.generateShortUrl(input.getOriginalUrl()), input.getOriginalUrl());
+                String.join("/", input.getDomainName(), shortUrl)
+                ,input.getOriginalUrl());
         User user = new User();
         user.setUserId(userId);
         mapping.setUser(user);
-        return this.mappingRepository.save(mapping).getShortUrl();
+        Date currentTime = new Date();
+        mapping.setCreateDate(currentTime);
+        mapping.setExpiryDate(Date.from(
+                currentTime.toInstant().plus(365, ChronoUnit.DAYS)));
+        return this.mappingRepository.save(mapping);
+    }
+
+    @Override
+    public void deleteShortenedUrl(long userId, String shortUrl) {
+        this.mappingRepository.deleteById(shortUrl);
     }
 
     @Override

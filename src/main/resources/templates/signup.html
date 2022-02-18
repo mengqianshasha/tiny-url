@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign Up - TinyUrl</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/webjars/font-awesome/css/fontawesome.css" />
+    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body style="background-image: url(https://images.unsplash.com/photo-1477346611705-65d1883cee1e?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1920&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjMyMDc0fQ&amp;s=c0d43804e2c7c93143fe8ff65398c8e9);">
+<div class="wrapper">
+    <div class="logo">
+        <img th:src="@{/img/tiny_url.png}" />
+    </div>
+    <form class="p-3 mt-3" th:action="@{/register}" th:object="${user}" method="post" autocomplete="off" >
+        <div class="form-field d-flex align-items-center">
+            <i class="fa fa-user"></i>
+            <input type="text" th:field="*{userName}" class="form-control" placeholder="User Name"
+               required/>
+        </div>
+        <div class="form-field d-flex align-items-center">
+            <i class="fa fa-envelope"></i>
+            <input type="email" th:field="*{email}" class="form-control"
+                   placeholder="Email Address" required />
+        </div>
+        <div class="form-field d-flex align-items-center">
+            <i class="fa fa-key"></i>
+            <input type="password" th:field="*{password}" class="form-control" placeholder="Create Password"
+                   required minlength="6" maxlength="10"/>
+        </div>
+
+        <input type="submit" value="Create Account" class="btn mt-3" />
+    </form>
+    <div class="p-3 d-flex flex-row justify-content-center align-items-center member">
+        <span>Have an account? </span> <a th:href="@{/login}">Log In</a>
+    </div>
+</div>
+</body>
+</html>
