@@ -1,6 +1,15 @@
 .wrapper {
-    max-width: 350px;
+    max-width: 400px;
     min-height: 500px;
+    margin: 80px auto;
+    padding: 40px 30px 30px 30px;
+    background-color: #ecf0f3;
+    border-radius: 15px;
+}
+
+.wrapper2 {
+    max-width: 400px;
+    min-height: 400px;
     margin: 80px auto;
     padding: 40px 30px 30px 30px;
     background-color: #ecf0f3;
@@ -21,12 +30,12 @@
 }
 
 .wrapper .form-field input {
-    width: 100%;
+    width: 95%;
     display: block;
     border: none;
     outline: none;
     background: none;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #666;
     padding: 10px 15px 10px 10px
 }
@@ -36,6 +45,13 @@
     margin-bottom: 20px;
     border-radius: 20px;
     box-shadow: inset 8px 8px 8px #cbced1, inset -8px -8px 8px #fff
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 .wrapper .form-field .fas {
@@ -67,12 +83,38 @@
     color: #039BE5
 }
 
-.member a {
-    margin-left: 5px;
+.wrapper2 .btn {
+    box-shadow: none;
+    width: 100%;
+    height: 40px;
+    background-color: #03A9F4;
+    color: #fff;
+    border-radius: 25px;
+    box-shadow: 3px 3px 3px #b1b1b1, -3px -3px 3px #fff;
+    letter-spacing: 1.3px
+}
+
+.wrapper2 .btn:hover {
+    background-color: #039BE5
+}
+
+.wrapper2 a {
+    text-decoration: none;
+    font-size: 0.8rem;
+    color: #03A9F4
+}
+
+.wrapper2 a:hover {
+    color: #039BE5
 }
 
 @media(max-width: 380px) {
     .wrapper {
+        margin: 30px 20px;
+        padding: 40px 15px 15px 15px
+    }
+
+    .wrapper2 {
         margin: 30px 20px;
         padding: 40px 15px 15px 15px
     }

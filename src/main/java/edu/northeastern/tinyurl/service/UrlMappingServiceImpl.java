@@ -1,20 +1,19 @@
 package edu.northeastern.tinyurl.service;
 
+import edu.northeastern.tinyurl.exception.ShortUrlAlreadyExistException;
 import edu.northeastern.tinyurl.exception.UrlMappingNotFoundException;
 import edu.northeastern.tinyurl.model.UrlMapping;
+import edu.northeastern.tinyurl.model.UrlMappingId;
 import edu.northeastern.tinyurl.model.UrlMappingRequest;
 import edu.northeastern.tinyurl.model.User;
+import edu.northeastern.tinyurl.repository.UrlMappingIdRepository;
 import edu.northeastern.tinyurl.repository.UrlMappingRepository;
 import edu.northeastern.tinyurl.repository.UserRepository;
 import edu.northeastern.tinyurl.util.ShortUrlGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,13 +25,23 @@ public class UrlMappingServiceImpl implements UrlMappingService{
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UrlMappingIdRepository idRepository;
+
     @Override
     public UrlMapping createShortenedUrl(long userId, UrlMappingRequest input) {
-        String shortUrl = input.getCustomUrl() != null ? input.getCustomUrl() :
-                ShortUrlGenerator.generateShortUrl(input.getOriginalUrl());
-        UrlMapping mapping = new UrlMapping(
-                String.join("/", input.getDomainName(), shortUrl)
-                ,input.getOriginalUrl());
+        if (input.getCustomUrl() != null && !input.getCustomUrl().isEmpty() &&
+                this.mappingRepository.findById(input.getCustomUrl()).isPresent()){
+            throw new ShortUrlAlreadyExistException(
+                    "The custom url:" + input.getCustomUrl() + " already exists");
+        }
+
+        long value = this.idRepository.save(new UrlMappingId()).getId();
+        String shortUrl = input.getCustomUrl() != null && !input.getCustomUrl().isEmpty() ? input.getCustomUrl() :
+                ShortUrlGenerator.base62Encoding(value);
+
+        UrlMapping mapping = new UrlMapping(shortUrl ,input.getOriginalUrl());
+        mapping.setDomainName(input.getDomainName());
         User user = new User();
         user.setUserId(userId);
         mapping.setUser(user);
@@ -49,10 +58,10 @@ public class UrlMappingServiceImpl implements UrlMappingService{
     }
 
     @Override
-    public String getOriginalUrl(String shortUrl) {
+    public UrlMapping getUrlMapping(String shortUrl) {
         return this.mappingRepository.findById(shortUrl).
                 orElseThrow(() -> new UrlMappingNotFoundException("There is no" +
-                        " original url for current shortened url:" + shortUrl)).getOriginalUrl();
+                        " original url for current shortened url:" + shortUrl));
     }
 
     @Override

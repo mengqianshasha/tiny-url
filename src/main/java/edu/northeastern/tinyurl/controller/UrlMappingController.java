@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * This is the controller class for the restful web service
+ */
 @RestController
 @RequestMapping("/url")
 public class UrlMappingController {
@@ -26,7 +29,7 @@ public class UrlMappingController {
     @Secured("permitAll")
     @GetMapping("/mapping/{shortUrl}")
     public ResponseEntity getOneUrlMapping(@PathVariable String shortUrl){
-        String originalUrl = this.urlMappingService.getOriginalUrl(shortUrl);
+        String originalUrl = this.urlMappingService.getUrlMapping(shortUrl).getOriginalUrl();
         return ResponseEntity.status(HttpStatus.FOUND).header("Location", originalUrl).build();
     }
 

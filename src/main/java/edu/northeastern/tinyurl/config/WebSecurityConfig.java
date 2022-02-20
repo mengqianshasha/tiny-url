@@ -1,7 +1,6 @@
 package edu.northeastern.tinyurl.config;
 
 import edu.northeastern.tinyurl.service.CustomUserDetailsService;
-import edu.northeastern.tinyurl.service.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -36,6 +35,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new AnonymousOnlyAccessDeniedHandler();
+    }
+
     /**
      * This method tells Spring Security how to auth againt user login
      * @param auth
@@ -55,7 +59,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers(
-                        "/webjars/**",
                         "/js/**",
                         "/img/**",
                         "/fonts/**",
@@ -71,15 +74,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers( "/register", "/login", "/logout").permitAll()
+                .antMatchers( "/app/register", "/app/login").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/app/login")
                 .usernameParameter("email")
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/app")
                 .and()
-                .logout().logoutSuccessUrl("/");
+                .logout().logoutUrl("/app/logout").logoutSuccessUrl("/app")
+                .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }
 }

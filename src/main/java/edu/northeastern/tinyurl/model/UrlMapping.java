@@ -1,7 +1,6 @@
 package edu.northeastern.tinyurl.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,6 +23,8 @@ public class UrlMapping implements Serializable {
     private String shortUrl;
     private String originalUrl;
 
+    private String domainName;
+
     private Date createDate;
     private Date expiryDate;
 
@@ -31,6 +32,7 @@ public class UrlMapping implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore
     private User user;
+
     public String getShortUrl() {
         return shortUrl;
     }
@@ -71,14 +73,15 @@ public class UrlMapping implements Serializable {
         this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "UrlMapping{" +
-                "shortUrl='" + shortUrl + '\'' +
-                ", originalUrl='" + originalUrl + '\'' +
-                ", createDate=" + createDate +
-                ", expiryDate=" + expiryDate +
-                ", user=" + user +
-                '}';
+    public String getDomainName() {
+        return domainName;
+    }
+
+    public void setDomainName(String domainName) {
+        this.domainName = domainName;
+    }
+
+    public String getNormalizedShortUrl(){
+        return String.join("/", this.domainName, this.shortUrl);
     }
 }
