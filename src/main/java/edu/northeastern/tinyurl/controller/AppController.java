@@ -6,9 +6,6 @@ import edu.northeastern.tinyurl.model.User;
 import edu.northeastern.tinyurl.service.UrlMappingService;
 import edu.northeastern.tinyurl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -68,8 +65,7 @@ public class AppController {
             Model model,
             Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        model.addAttribute("mappings", this.mappingService.getUrlMappings(
-                this.userService.getUserByEmail(userDetails.getUsername()).getUserId()));
+        model.addAttribute("mappings", this.mappingService.getUrlMappings(userDetails.getUsername()));
 
         return "history";
     }
@@ -81,11 +77,10 @@ public class AppController {
             Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         UrlMapping mapping = this.mappingService.createShortenedUrl(
-                this.userService.getUserByEmail(userDetails.getUsername()).getUserId(), request);
+                userDetails.getUsername(), request);
         model.addAttribute("actionMapping", mapping);
         model.addAttribute("mapping_action", "created");
-        model.addAttribute("mappings", this.mappingService.getUrlMappings(
-                this.userService.getUserByEmail(userDetails.getUsername()).getUserId()));
+        model.addAttribute("mappings", this.mappingService.getUrlMappings(userDetails.getUsername()));
         return "history";
     }
 
@@ -95,8 +90,7 @@ public class AppController {
             RedirectAttributes attributes,
             Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        long userId = this.userService.getUserByEmail(userDetails.getUsername()).getUserId();
-        UrlMapping mapping = this.mappingService.deleteShortenedUrl(userId, shortUrl);
+        UrlMapping mapping = this.mappingService.deleteShortenedUrl(userDetails.getUsername(), shortUrl);
         // These two will be added as model attributes after redirect
         attributes.addFlashAttribute("actionMapping", mapping);
         attributes.addFlashAttribute("mapping_action", "deleted");

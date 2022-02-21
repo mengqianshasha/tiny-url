@@ -7,7 +7,6 @@ import edu.northeastern.tinyurl.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,16 +35,14 @@ public class UrlMappingController {
     @PostMapping("/urls")
     public UrlMapping createUrlMapping(@RequestBody UrlMappingRequest input, Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return this.urlMappingService.createShortenedUrl(
-                this.userService.getUserByEmail(userDetails.getUsername()).getUserId(), input);
+        return this.urlMappingService.createShortenedUrl(userDetails.getUsername(), input);
     }
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/urls/{shortUrl}")
     public ResponseEntity deleteUrlMapping(@PathVariable String shortUrl, Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        this.urlMappingService.deleteShortenedUrl(
-                this.userService.getUserByEmail(userDetails.getUsername()).getUserId(), shortUrl);
+        this.urlMappingService.deleteShortenedUrl(userDetails.getUsername(), shortUrl);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -53,7 +50,6 @@ public class UrlMappingController {
     @GetMapping("/urls")
     public List<UrlMapping> getUrlMapping(Authentication authentication){
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return this.urlMappingService.getUrlMappings(
-                this.userService.getUserByEmail(userDetails.getUsername()).getUserId());
+        return this.urlMappingService.getUrlMappings(userDetails.getUsername());
     }
 }

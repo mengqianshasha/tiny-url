@@ -29,7 +29,7 @@ public class UrlMapping implements Serializable {
     private Date expiryDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_email", referencedColumnName = "email")
     @JsonIgnore
     private User user;
 
