@@ -19,12 +19,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-public class UrlMappingController {
+public class ApiController {
     @Autowired
     private UrlMappingService urlMappingService;
-
-    @Autowired
-    private UserService userService;
 
     @GetMapping("/urls/{shortUrl}")
     public String getOneUrlMapping(@PathVariable String shortUrl){
