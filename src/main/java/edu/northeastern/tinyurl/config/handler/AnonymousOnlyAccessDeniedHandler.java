@@ -1,4 +1,4 @@
-package edu.northeastern.tinyurl.config;
+package edu.northeastern.tinyurl.config.handler;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;

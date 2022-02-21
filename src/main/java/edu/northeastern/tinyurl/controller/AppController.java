@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  * This is the controller class for the web application
  */
 @Controller
+@RequestMapping("/app")
 public class AppController {
     @Autowired
     private UserService userService;
@@ -32,7 +33,7 @@ public class AppController {
     @Autowired
     private UrlMappingService mappingService;
 
-    @GetMapping("/app")
+    @GetMapping("")
     public String showHomePage(Model model, HttpServletRequest request) {
         String baseUrl = ServletUriComponentsBuilder.fromRequestUri(request)
                 .replacePath(null)
@@ -45,20 +46,24 @@ public class AppController {
         return "home";
     }
 
-    @GetMapping("/app/register")
+    @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User());
         return "signup";
     }
 
-    @Secured("permitAll")
-    @GetMapping("/{shortUrl}")
-    public ResponseEntity getOriginalUrl(@PathVariable String shortUrl) {
-        String originalUrl = this.mappingService.getUrlMapping(shortUrl).getOriginalUrl();
-        return ResponseEntity.status(HttpStatus.FOUND).header("Location", originalUrl).build();
+    @PostMapping("/register")
+    public String handleRegistration(User user) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+
+        this.userService.createUser(user);
+
+        return "login";
     }
 
-    @GetMapping("/app/myurls")
+    @GetMapping("/myurls")
     public String showHistory(
             Model model,
             Authentication authentication) {
@@ -69,7 +74,7 @@ public class AppController {
         return "history";
     }
 
-    @PostMapping("/app/myurls")
+    @PostMapping("/myurls")
     public String createMapping(
             UrlMappingRequest request,
             Model model,
@@ -84,29 +89,17 @@ public class AppController {
         return "history";
     }
 
-    @PostMapping("/app/myurls/{shortUrl}")
+    @PostMapping("/myurls/{shortUrl}")
     public String deleteMapping(
             @PathVariable String shortUrl,
             RedirectAttributes attributes,
             Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         long userId = this.userService.getUserByEmail(userDetails.getUsername()).getUserId();
-        UrlMapping mapping = this.mappingService.getUrlMapping(shortUrl);
-        this.mappingService.deleteShortenedUrl(userId, shortUrl);
+        UrlMapping mapping = this.mappingService.deleteShortenedUrl(userId, shortUrl);
         // These two will be added as model attributes after redirect
         attributes.addFlashAttribute("actionMapping", mapping);
         attributes.addFlashAttribute("mapping_action", "deleted");
         return "redirect:/app/myurls";
-    }
-
-    @PostMapping("/app/register")
-    public String handleRegistration(User user) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-
-        this.userService.createUser(user);
-
-        return "login";
     }
 }

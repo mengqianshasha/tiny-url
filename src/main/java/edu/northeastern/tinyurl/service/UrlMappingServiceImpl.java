@@ -1,6 +1,7 @@
 package edu.northeastern.tinyurl.service;
 
 import edu.northeastern.tinyurl.exception.ShortUrlAlreadyExistException;
+import edu.northeastern.tinyurl.exception.UrlMappingNotBelongToCurrentUserException;
 import edu.northeastern.tinyurl.exception.UrlMappingNotFoundException;
 import edu.northeastern.tinyurl.model.UrlMapping;
 import edu.northeastern.tinyurl.model.UrlMappingId;
@@ -11,6 +12,9 @@ import edu.northeastern.tinyurl.repository.UrlMappingRepository;
 import edu.northeastern.tinyurl.repository.UserRepository;
 import edu.northeastern.tinyurl.util.ShortUrlGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -53,11 +57,20 @@ public class UrlMappingServiceImpl implements UrlMappingService{
     }
 
     @Override
-    public void deleteShortenedUrl(long userId, String shortUrl) {
+    @CacheEvict(value = "url_mapping", key = "#shortUrl")
+    public UrlMapping deleteShortenedUrl(long userId, String shortUrl) {
+        UrlMapping mapping = this.getUrlMapping(shortUrl);
+        if (mapping.getUser().getUserId() != userId){
+            throw new UrlMappingNotBelongToCurrentUserException(
+                    "Trying to delete a short url not belong to current user is not allowed");
+        }
+
         this.mappingRepository.deleteById(shortUrl);
+        return mapping;
     }
 
     @Override
+    @Cacheable(value = "url_mapping", key = "#shortUrl")
     public UrlMapping getUrlMapping(String shortUrl) {
         return this.mappingRepository.findById(shortUrl).
                 orElseThrow(() -> new UrlMappingNotFoundException("There is no" +

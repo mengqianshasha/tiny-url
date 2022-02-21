@@ -1,8 +1,10 @@
 package edu.northeastern.tinyurl.config;
 
+import edu.northeastern.tinyurl.config.handler.AnonymousOnlyAccessDeniedHandler;
 import edu.northeastern.tinyurl.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +17,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@Order(1)
+public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsService() {
         return new CustomUserDetailsService();
@@ -73,11 +76,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.antMatcher("/app/**").authorizeRequests()
                 .antMatchers( "/app/register", "/app/login").anonymous()
                 .anyRequest().authenticated()
                 .and()
-                .csrf().disable()
+                .csrf()
+                .disable()
                 .formLogin()
                 .loginPage("/app/login")
                 .usernameParameter("email")
