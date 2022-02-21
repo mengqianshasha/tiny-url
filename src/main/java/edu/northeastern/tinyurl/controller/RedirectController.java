@@ -1,10 +1,12 @@
 package edu.northeastern.tinyurl.controller;
 
+import edu.northeastern.tinyurl.exception.ShortUrlExpiredException;
+import edu.northeastern.tinyurl.model.UrlMapping;
+import edu.northeastern.tinyurl.model.UrlMappingStatus;
 import edu.northeastern.tinyurl.service.UrlMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -17,8 +19,22 @@ public class RedirectController {
     private UrlMappingService mappingService;
 
     @GetMapping("/{shortUrl}")
-    public ResponseEntity getOriginalUrl(@PathVariable String shortUrl) {
-        String originalUrl = this.mappingService.getUrlMapping(shortUrl).getOriginalUrl();
-        return ResponseEntity.status(HttpStatus.FOUND).header("Location", originalUrl).build();
+    public String getOriginalUrl(@PathVariable String shortUrl, Model model) {
+        String originalUrl = null;
+        try {
+             UrlMapping mapping = this.mappingService.getUrlMapping(shortUrl);
+             if (mapping.getStatus() == UrlMappingStatus.Expired){
+                 this.mappingService.deleteShortenedUrlAsync(
+                         mapping.getUser().getEmail(), shortUrl);
+                 throw new ShortUrlExpiredException("Error: this short url has been expired");
+             }
+
+             originalUrl = mapping.getOriginalUrl();
+        }catch (Exception ex){
+             model.addAttribute("error", ex.getMessage());
+             return "redirect_error";
+        }
+
+        return "redirect:" + originalUrl;
     }
 }

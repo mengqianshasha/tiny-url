@@ -14,6 +14,7 @@ import edu.northeastern.tinyurl.util.ShortUrlGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -69,11 +70,17 @@ public class UrlMappingServiceImpl implements UrlMappingService{
     }
 
     @Override
+    @CacheEvict(value = "url_mapping", key = "#shortUrl")
+    @Async
+    public void deleteShortenedUrlAsync(String email, String shortUrl) {
+        this.mappingRepository.deleteById(shortUrl);
+    }
+
+    @Override
     @Cacheable(value = "url_mapping", key = "#shortUrl")
     public UrlMapping getUrlMapping(String shortUrl) {
         return this.mappingRepository.findById(shortUrl).
-                orElseThrow(() -> new ShortUrlNotFoundException("There is no" +
-                        " original url for current shortened url:" + shortUrl));
+                orElseThrow(() -> new ShortUrlNotFoundException("Error: Unable to find URL to redirect to"));
     }
 
     @Override

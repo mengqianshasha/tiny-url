@@ -84,4 +84,13 @@ public class UrlMapping implements Serializable {
     public String getNormalizedShortUrl(){
         return String.join("/", this.domainName, this.shortUrl);
     }
+
+    public UrlMappingStatus getStatus(){
+        Date now = new Date();
+        if (now.after(this.expiryDate)){
+            return UrlMappingStatus.Expired;
+        }else{
+            return UrlMappingStatus.Active;
+        }
+    }
 }

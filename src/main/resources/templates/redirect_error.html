@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login - TinyUrl</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+</head>
+<head>
+    <meta charset="UTF-8">
+    <title>Error - TinyUrl</title>
+</head>
+<body>
+<nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" th:href="@{/app}"><img th:src="@{/img/tiny_url.png}" style="width: 20%"></a>
+</nav>
+<div class="wrapper" style="min-height: 200px">
+    <p class="text-danger h2" th:text="${error}"></p>
+    <p>Please check that the URL entered is correct. To learn more about TinyUrl, check
+        <a th:href="@{/app}">homepage</a></p>
+</div>
+</body>
+</html>
