@@ -11,4 +11,5 @@ public interface UrlMappingService {
     public void deleteShortenedUrlAsync(String email, String shortUrl);
     public UrlMapping getUrlMapping(String shortUrl);
     public List<UrlMapping> getUrlMappings(String email);
+    public void cleanUpExpiredMapping();
 }

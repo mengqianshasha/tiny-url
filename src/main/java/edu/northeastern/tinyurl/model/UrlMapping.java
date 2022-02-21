@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "urlmappings")
+@Table(name = "urlmappings", indexes = @Index(name = "expiry_index", columnList = "expiryDate"))
 public class UrlMapping implements Serializable {
     private static final long serialVersionUID = 8370782340476794025L;
 

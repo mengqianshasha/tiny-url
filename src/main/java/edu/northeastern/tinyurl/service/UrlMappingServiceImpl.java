@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
@@ -86,5 +87,11 @@ public class UrlMappingServiceImpl implements UrlMappingService{
     @Override
     public List<UrlMapping> getUrlMappings(String email) {
         return this.userRepository.findById(email).get().getMappings();
+    }
+
+    @Override
+    @Scheduled(cron="0 20 14 * * *")
+    public void cleanUpExpiredMapping() {
+        this.mappingRepository.deleteExpiredUrlMapping(new Date());
     }
 }
