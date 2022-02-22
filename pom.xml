@@ -11,7 +11,7 @@
     <groupId>edu.northeastern</groupId>
     <artifactId>tinyurl</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>tinyurl</name>
+    <name>mytinyurl-springboot</name>
     <description>tinyurl</description>
     <properties>
         <java.version>17</java.version>
@@ -84,6 +84,33 @@
                             <excludes>
                                 <exclude>**/cloud/config/*.java</exclude>
                             </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>heroku</id>
+            <properties>
+                <spring.profiles.active>heroku</spring.profiles.active>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- Heroku Maven Plugin Configuration -->
+                    <plugin>
+                        <groupId>com.heroku.sdk</groupId>
+                        <artifactId>heroku-maven-plugin</artifactId>
+                        <version>3.0.4</version>
+                        <configuration>
+                            <appName>${project.name}</appName>
+                            <includeTarget>false</includeTarget>
+                            <includes>
+                                <include>${project.build.directory}/${project.build.finalName}.jar</include>
+                            </includes>
+                            <jdkVersion>${java.version}</jdkVersion>
+                            <processTypes>
+                                <web>java $JAVA_OPTS -jar ${project.build.directory}/${project.build.finalName}.jar</web>
+                            </processTypes>
                         </configuration>
                     </plugin>
                 </plugins>
