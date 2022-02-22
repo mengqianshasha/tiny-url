@@ -15,10 +15,10 @@ Spring Boot + Spring Data Redis + Spring Data MySql + Spring Security + Spring S
 - Add the functionality of running realtime analytics for how many redirect occurs etc.
 ## Deployment
 - Deployed via AWS Beanstalk
-- Also tried with deployment with Heroku using [Heroku-Maven-Plugin](https://github.com/heroku/heroku-maven-plugin) so that we don't need a remote heroku repository to be able to deploy
+- Also tried with deployment with Heroku using [Heroku-Maven-Plugin](https://github.com/heroku/heroku-maven-plugin) so that I don't need a remote heroku repository to be able to deploy
    - Just run mvn heroku:deploy -Pheroku
    - Changed to postgresql for that env cuz that's what it supported
-   - Needs to change the jdbc url for postgresql cuz it start with postgres instead of postgresql
+   - Needs to change the jdbc url for postgresql cuz it start with postgres instead of postgresql on Heroku
    - https://mytinyurl-springboot.herokuapp.com/ 
 
 ## Docker-Compose
