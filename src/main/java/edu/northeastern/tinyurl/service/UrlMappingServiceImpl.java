@@ -90,7 +90,7 @@ public class UrlMappingServiceImpl implements UrlMappingService{
     }
 
     @Override
-    @Scheduled(cron="0 20 14 * * *")
+    @Scheduled(cron="0 0 23 * * *")
     public void cleanUpExpiredMapping() {
         this.mappingRepository.deleteExpiredUrlMapping(new Date());
     }
