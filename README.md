@@ -22,7 +22,7 @@ Spring Boot + Spring Data Redis + Spring Data MySql + Spring Security + Spring S
    - https://mytinyurl-springboot.herokuapp.com/ 
 
 ## Docker-Compose
-- Use docker compose for local deployment to start mysql and redis
+- Use docker compose for local external dependency management aka. mysql and redis
 - docker-compose -f .\docker-compose.yml up
 
 
