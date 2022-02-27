@@ -6,7 +6,7 @@ Spring Boot + Spring Data Redis + Spring Data MySql + Spring Security + Spring S
 
 ## Implemented functionality
 - Created a web app under /app endpoint with below functionality
-    - Register and login
+    - Register, login and logout
     - Create new short url with random generated hash or customized short url
     - Manage my url history and able to delete
     - Redirect the short url to its original url
