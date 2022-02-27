@@ -16,6 +16,8 @@ Spring Boot + Spring Data Redis + Spring Data MySql + Spring Security + Spring S
     - get /api/urls/{shortUrlHash} 
     - delete /api/urls/{shortUrlHash}
     - get /api/urls
+
+![tiny url](https://github.com/mengqianshasha/tiny-url/blob/main/tinyurl.png)
 ## To-do
 - Add the functionality of running realtime analytics for how many redirect occurs etc.
 ## Deployment
