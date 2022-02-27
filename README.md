@@ -5,12 +5,17 @@ A spring boot based tiny url restful service and web application
 Spring Boot + Spring Data Redis + Spring Data MySql + Spring Security + Spring Scheduler
 
 ## Implemented functionality
-- Register and login
-- Create new short url with random generated hash or customized short url
-- Manage my url history and able to delete
-- Redirect the short url to its original url
-- A scheduler to clean up expired entries daily and on read if it detects expiration, it will return error to user and delete the entry asynchrounously.
-
+- Created a web app under /app endpoint with below functionality
+    - Register and login
+    - Create new short url with random generated hash or customized short url
+    - Manage my url history and able to delete
+    - Redirect the short url to its original url
+    - A scheduler to clean up expired entries daily and on read if it detects expiration, it will return error to user and delete the entry asynchrounously.
+- Created a restful api endpoint /api with below endpoint
+    - post /api/urls
+    - get /api/urls/{shortUrlHash} 
+    - delete /api/urls/{shortUrlHash}
+    - get /api/urls
 ## To-do
 - Add the functionality of running realtime analytics for how many redirect occurs etc.
 ## Deployment
