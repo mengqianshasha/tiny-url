@@ -78,6 +78,7 @@
             <id>beanstalk</id>
             <properties>
                 <spring.profiles.active>beanstalk</spring.profiles.active>
+                <java.version>11</java.version>
             </properties>
             <build>
                 <finalName>${project.name}-eb</finalName>
@@ -107,7 +108,7 @@
                         <artifactId>heroku-maven-plugin</artifactId>
                         <version>3.0.4</version>
                         <configuration>
-                            <appName>mytinyurl-springboot</appName>
+                            <appName>${project.name}</appName>
                             <includeTarget>false</includeTarget>
                             <includes>
                                 <include>target/${project.build.finalName}.jar</include>
