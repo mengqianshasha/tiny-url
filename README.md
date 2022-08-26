@@ -18,8 +18,13 @@ Spring Boot + Spring Data Redis + Spring Data MySql + Spring Security + Spring S
     - get /api/urls
 
 ![tiny url](https://github.com/mengqianshasha/tiny-url/blob/main/tinyurl.png)
+
+## Build
+- mvn spring-boot:run
+
 ## To-do
 - Add the functionality of running realtime analytics for how many redirect occurs etc.
+
 ## Deployment
 - Deployed via AWS Beanstalk
     - http://tinyurl-env.eba-yf93cwth.us-west-2.elasticbeanstalk.com/
@@ -31,6 +36,9 @@ Spring Boot + Spring Data Redis + Spring Data MySql + Spring Security + Spring S
 
 ## Docker-Compose
 - Use docker compose for local external dependency management aka. mysql and redis
-- docker-compose -f .\docker-compose.yml up
+- install Docker Desktop
+- $ docker-compose -f docker-compose.yml up &
+- $ docker ps (to check if the process has been started)
+
 
 
