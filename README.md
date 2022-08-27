@@ -4,6 +4,9 @@ A spring boot based tiny url restful service and web application
 
 Spring Boot + Spring Data Redis + Spring Data JPA + Spring Security + Spring Scheduler
 
+<img width="1063" alt="image" src="https://user-images.githubusercontent.com/47233869/187050918-33b24d9b-d5f7-423a-b3f2-e02c90432bb9.png">
+
+
 ## Implemented functionality
 - Created a web app under /app endpoint with below functionality
     - Register, login and logout
