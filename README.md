@@ -2,7 +2,7 @@
 
 A spring boot based tiny url restful service and web application
 
-Spring Boot + Spring Data Redis + Spring Data MySql + Spring Security + Spring Scheduler
+Spring Boot + Spring Data Redis + Spring Data JPA + Spring Security + Spring Scheduler
 
 ## Implemented functionality
 - Created a web app under /app endpoint with below functionality
